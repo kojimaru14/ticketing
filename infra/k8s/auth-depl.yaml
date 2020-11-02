@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-depl
+spec:
+  replicas: 1
+  selector: # you are telling the deployment to look for a pod that has the key value pair of app=auth
+    matchLabels:
+      app: auth
+  template: # you are telling the deployment to create a pod with specific name (app=auth)
+    metadata:
+      labels:
+        app: auth
+    spec:   # config of the pod you are trying to make
+      containers:
+        - name: auth
+          image: lyugaloki/auth
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-srv
+spec:
+  selector:
+    app: auth
+  ports:
+    - name: auth
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
+      
