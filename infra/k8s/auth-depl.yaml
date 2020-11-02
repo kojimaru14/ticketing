@@ -14,7 +14,7 @@ spec:
     spec:   # config of the pod you are trying to make
       containers:
         - name: auth
-          image: lyugaloki/auth
+          image: us.gcr.io/ticketing-dev-294323/auth
 ---
 apiVersion: v1
 kind: Service
