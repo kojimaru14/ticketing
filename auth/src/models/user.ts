@@ -7,6 +7,12 @@ interface UserAttrs {
   password: string;
 }
 
+// An interface that describes the properties that a User Model has.
+// Telling TypeScript about the existence of "build" function.
+interface UserModel extends mongoose.Model<any> {
+  build(attrs: UserAttrs): any;
+}
+
 const userSchema = new mongoose.Schema({
   email: {
     type: String, // This "String" is capitalised
@@ -17,14 +23,13 @@ const userSchema = new mongoose.Schema({
     required: true
   }
 });
-const User = mongoose.model('User', userSchema);
-
-// This is the function to make sure that user model follows TypeScript requirements
-const buildUser = (attrs: UserAttrs) => {
+// We want to do something like this:
+// const personA = User.build({ email: "test@test.com", password: "12345" });
+// so that we can just export User model and don't need to export build function
+userSchema.statics.build = (attrs: UserAttrs) => {
   return new User(attrs);
 };
 
-// When creating a user, we can do something like
-// const personA = buildUser({ email: "test@test.com", password: "12345" });
+const User = mongoose.model<any, UserModel>('User', userSchema);
 
-export { User, buildUser };
+export { User };
