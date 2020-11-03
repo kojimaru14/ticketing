@@ -1,4 +1,5 @@
 import express from 'express';
+import 'express-async-errors'; // express by default requires exception to be passed to "next" function within "async" function but this package lets us not worry about it
 import { json } from 'body-parser';
 
 import { currentUserRouter } from './routes/current-user';
@@ -16,7 +17,7 @@ app.use(signinRouter);
 app.use(signoutRouter);
 app.use(signupRouter);
 
-app.all('*', () => {
+app.all('*', async() => {
   throw new NotFoundError();
 });
 
