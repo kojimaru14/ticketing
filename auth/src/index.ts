@@ -1,5 +1,6 @@
 import express from 'express';
 import 'express-async-errors'; // express by default requires exception to be passed to "next" function within "async" function but this package lets us not worry about it
+import mongoose from 'mongoose'; // library we use to connect to MongoDB
 import { json } from 'body-parser';
 
 import { currentUserRouter } from './routes/current-user';
@@ -23,6 +24,21 @@ app.all('*', async() => {
 
 app.use(errorHandler);
 
-app.listen(3000, () => {
-  console.log('Listening on port 3000!');
-});
+const start = async() => {
+  try {
+    await mongoose.connect('mongodb://auth-mongo-srv:27017/auth', { // "auth-mongo-srv" is the IP address/domain of mongoDB, "auth" is the name of DB.
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useCreateIndex: true
+    });
+    console.log("connected to MongoDB");
+  } catch (err) {
+    console.error(err);
+  }
+
+  app.listen(3000, () => {
+    console.log('Listening on port 3000!');
+  });
+}
+
+start();
