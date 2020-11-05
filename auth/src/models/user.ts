@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { Password } from '../services/password';
 
 // An interface that describes the properties 
 // that are required to create a new User
@@ -29,6 +30,17 @@ const userSchema = new mongoose.Schema({
     required: true
   }
 });
+
+// "pre" is a middleware function implemented in mongoose.
+// anytime we try to "save" something into database, this function gets executed.
+userSchema.pre('save', async function(done) {
+  if( this.isModified('password') ) { // "this" is userSchema class
+    const hashed = await Password.toHash(this.get('password'));
+    this.set('password', hashed);
+  }
+  done(); // We need to call done -- mongoose does not have great support of out of the box for async/await
+});
+
 // We want to do something like this:
 // const personA = User.build({ email: "test@test.com", password: "12345" });
 // so that we can just export User model and don't need to export build function
