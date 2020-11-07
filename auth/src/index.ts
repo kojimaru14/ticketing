@@ -31,6 +31,10 @@ app.all('*', async() => {
 app.use(errorHandler);
 
 const start = async() => {
+  if (!process.env.JWT_KEY){ 
+    throw new Error('JWT_KEY must be defined.'); // We immediately throw the error and stop running express if JWT key string is not defined in the environment variable of the pod.
+  }
+
   try {
     await mongoose.connect('mongodb://auth-mongo-srv:27017/auth', { // "auth-mongo-srv" is the IP address/domain of mongoDB, "auth" is the name of DB.
       useNewUrlParser: true,

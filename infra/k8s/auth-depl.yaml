@@ -15,6 +15,12 @@ spec:
       containers:
         - name: auth
           image: us.gcr.io/ticketing-dev-294323/auth
+          env:
+            - name: JWT_KEY # assign the name of the variable to reference from the deployment (or the source code)
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret # name of the secret we created with imperative kubectl command (see README.md)
+                  key: JWT_KEY # name of the key in the secret we created with imperative kubectl command (see README.md)
 ---
 apiVersion: v1
 kind: Service

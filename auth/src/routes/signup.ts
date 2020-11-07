@@ -32,10 +32,13 @@ router.post('/api/users/signup', [
     await user.save();  // building user doesn't save the record to DB, we need to save it.
 
     // Generate JWT
-    const userJwt = jwt.sign({
-      id: user.id,
-      email: user.email
-    }, 'privatekeystring');
+    const userJwt = jwt.sign(
+      {
+        id: user.id,
+        email: user.email
+      },
+      process.env.JWT_KEY! // The priavete key string is pulled from the env variable which is defined in deployment (auth-depl.yaml)
+    );
 
     // Store it on session object
     req.session = { jwt: userJwt };
