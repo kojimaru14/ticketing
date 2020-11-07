@@ -29,6 +29,15 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   }
+}, {
+  toJSON: {
+    transform(doc, ret) {
+      ret.id = ret._id;     // Change the key name from "_id" to "id";
+      delete ret._id;
+      delete ret.password;  // to remove "password" property returned to the client
+      delete ret.__v;       // to remove "__v" from JSON returned to the client
+    }
+  }
 });
 
 // "pre" is a middleware function implemented in mongoose.
