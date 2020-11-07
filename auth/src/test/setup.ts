@@ -7,6 +7,8 @@ let mongo: any;
 
 // A hook that runs before all of our different test start up
 beforeAll(async () => {
+  process.env.JWT_KEY = "testkeystring";
+  
   mongo = new MongoMemoryServer();
   const mongoUri = await mongo.getUri();
 
