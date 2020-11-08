@@ -1,6 +1,8 @@
 import request from 'supertest';
 import { app } from '../../app';
 
+jest.setTimeout(30000);
+
 it('returns a 201 on a successful signup', async () => {
   return request(app)
     .post('/api/users/signup')
