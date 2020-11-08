@@ -15,7 +15,7 @@ app.set('trust proxy', true); // We use nginx proxy and we want to trust this pr
 app.use(json());
 app.use(cookieSession({
   signed: false, // Do not encrypt cookie
-  secure: true,  // require HTTPS connection when sending cookie
+  secure: process.env.NODE_ENV !== 'test' // require HTTPS connection when sending cookie (when performing test, we want to allow HTTP connection)
 }));
 
 app.use(currentUserRouter);
